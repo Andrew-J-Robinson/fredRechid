@@ -22,7 +22,7 @@ import os
 import time
 
 #Token to connect code to Discord bot
-TOKEN = 'NTkwOTc0NTE2MjgxNDc1MTAy.XREf0A.867Zj9l5KqCmfvC2smSxiOG3q8Q'
+TOKEN = ''
 
 #Command prefix. Type this character before command. Eg: '.join'
 PREFIX = '.'
