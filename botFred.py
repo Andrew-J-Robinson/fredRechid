@@ -2,13 +2,10 @@
     File name: botFred.py
     Author: Andrew Robinson
     Date Created: 6/20/2019
-    Last Modified: 6/24/2019
+    Last Modified: 6/25/2019
     Python Version 3.6
 
     Known Issues:
-        Semantic Error: on_voice_state_update event calls when bot joins
-        channel but before connection is made, resulting in a "harmless" error
-
         Semantic Error: .play command conflicts with voice state update event
         When one is run after the other, it plays the audio clip from the
         previous execution and must be run a second time to work properly
@@ -44,9 +41,12 @@ async def on_voice_state_update(ctx, before, after):
 
                 time.sleep(.5)
 
-                voice.play(discord.FFmpegPCMAudio("clip.mp3"), after=lambda e: print(f"{name} has finished playing"))
-                voice.source = discord.PCMVolumeTransformer(voice.source)
-                voice.source.volume = 0.7
+                if voice.is_connected():
+                    voice.play(discord.FFmpegPCMAudio("clip.mp3"), after=lambda e: print(f"{name} has finished playing"))
+                    voice.source = discord.PCMVolumeTransformer(voice.source)
+                    voice.source.volume = 0.7
+                else:
+                    return
             else: #Else if it isn't, download the youtube clip and play it
                 voice = get(client.voice_clients, guild=ctx.guild)
                 ydl_opts = {
@@ -65,9 +65,12 @@ async def on_voice_state_update(ctx, before, after):
                         name = file
                         os.rename(file, "clip.mp3")
                         print(f"Renamed file: {file}\n")
-                voice.play(discord.FFmpegPCMAudio("clip.mp3"), after=lambda e: print(f"{name} has finished playing"))
-                voice.source = discord.PCMVolumeTransformer(voice.source)
-                voice.source.volume = 0.7
+                if voice.is_connected():
+                    voice.play(discord.FFmpegPCMAudio("clip.mp3"), after=lambda e: print(f"{name} has finished playing"))
+                    voice.source = discord.PCMVolumeTransformer(voice.source)
+                    voice.source.volume = 0.7
+                else:
+                    return
 
         except PermissionError:
             print("ERROR to remove audio file: file is in use\n")
@@ -147,7 +150,7 @@ async def play(ctx, url: str):
 
     newName = name.rsplit("-", 2)
     await ctx.send(f"Playing: {newName}")
-    print("playing")
+    print("playing\n")
 
 #Runs bot using token as defined above
 client.run(TOKEN)
