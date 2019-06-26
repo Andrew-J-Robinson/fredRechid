@@ -2,7 +2,7 @@
     File name: botFred.py
     Author: Andrew Robinson
     Date Created: 6/20/2019
-    Last Modified: 6/25/2019
+    Last Modified: 6/26/2019
     Python Version 3.6
 '''
 
@@ -16,8 +16,10 @@ import time
 #Bot setup
 #-------------------------------------------------------------------------------
 
-#Token to connect code to Discord bot
-TOKEN = ''
+#Read and pass token from token.txt
+tokenFile = open("token.txt", 'r')
+TOKEN = tokenFile.read().replace('\n', '')
+tokenFile.close()
 
 #Command prefix. Type this character before command. Eg: '.join'
 PREFIX = '.'
