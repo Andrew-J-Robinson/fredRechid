@@ -4,11 +4,6 @@
     Date Created: 6/20/2019
     Last Modified: 6/25/2019
     Python Version 3.6
-
-    Known Issues:
-        Semantic Error: .play command conflicts with voice state update event
-        When one is run after the other, it plays the audio clip from the
-        previous execution and must be run a second time to work properly
 '''
 
 import discord
@@ -18,17 +13,64 @@ import youtube_dl
 import os
 import time
 
+#Bot setup
+#-------------------------------------------------------------------------------
+
 #Token to connect code to Discord bot
-TOKEN = ''
+TOKEN = 'NTkwOTc0NTE2MjgxNDc1MTAy.XRJp9g.HMTEPOkKTYfMp9TxsVgUi4pB1xo'
 
 #Command prefix. Type this character before command. Eg: '.join'
 PREFIX = '.'
 client = commands.Bot(command_prefix = PREFIX)
 
+#Connect to cogs folder
+@client.command()
+async def load(ctx, extension):
+    client.load_extension(f'cogs.{extension}')
+
+@client.command()
+async def unload(ctx, extension):
+    client.unload_extension(f'cogs.{extension}')
+
+for filename in os.listdir('./cogs'):
+    if filename.endswith('.py'):
+        client.load_extension(f'cogs.{filename[:-3]}')
+
+#Basic Bot functions
+#-------------------------------------------------------------------------------
 #Confirm bot is online
 @client.event
 async def on_ready():
     print(client.user.name + " is online.\n")
+
+#Command bot to join voice channel
+@client.command(pass_context=True)
+async def join(ctx):
+    global voice
+    channel = ctx.message.author.voice.channel
+    voice = get(client.voice_clients, guild=ctx.guild)
+
+    if voice and voice.is_connected():
+        await voice.move_to(channel)
+        await ctx.send("I'm already in here, dummy.")
+    else:
+        voice = await channel.connect()
+        print(f"The bot has connected to {channel}\n")
+        await ctx.send("Sup, nerds?")
+
+#Command bot to leave voice channel
+@client.command(pass_context=True)
+async def leave(ctx):
+    channel = ctx.message.author.voice.channel
+    voice = get(client.voice_clients, guild=ctx.guild)
+
+    if voice and voice.is_connected():
+        await voice.disconnect()
+        print(f"The bot has left {channel}\n")
+        await ctx.send("I'm out this mf.")
+    else:
+        print("Leave command failed: Bot not in channel\n")
+        await ctx.send("You tryna kick me out and I'm not even in here?")
 
 #Play Spongebob quote when a user joins the voice channel
 @client.event
@@ -61,7 +103,7 @@ async def on_voice_state_update(ctx, before, after):
                     print("Downloading audio file now\n")
                     ydl.download(["https://www.youtube.com/watch?v=ifaoKZfQpdA"])
                 for file in os.listdir('./'):
-                    if file.endswith(".mp3"):
+                    if file.endswith(".mp3") and not file.endswith("song.mp3"):
                         name = file
                         os.rename(file, "clip.mp3")
                         print(f"Renamed file: {file}\n")
@@ -78,35 +120,6 @@ async def on_voice_state_update(ctx, before, after):
             return
     else:
         return
-
-#Command bot to join voice channel
-@client.command(pass_context=True)
-async def join(ctx):
-    global voice
-    channel = ctx.message.author.voice.channel
-    voice = get(client.voice_clients, guild=ctx.guild)
-
-    if voice and voice.is_connected():
-        await voice.move_to(channel)
-        await ctx.send("I'm already in here, dummy.")
-    else:
-        voice = await channel.connect()
-        print(f"The bot has connected to {channel}\n")
-        await ctx.send("Sup, nerds?")
-
-#Command bot to leave voice channel
-@client.command(pass_context=True)
-async def leave(ctx):
-    channel = ctx.message.author.voice.channel
-    voice = get(client.voice_clients, guild=ctx.guild)
-
-    if voice and voice.is_connected():
-        await voice.disconnect()
-        print(f"The bot has left {channel}\n")
-        await ctx.send("I'm out this mf.")
-    else:
-        print("Leave command failed: Bot not in channel\n")
-        await ctx.send("You tryna kick me out and I'm not even in here?")
 
 #Command bot to find youtube video and play audio
 @client.command(pass_context=True)
@@ -139,7 +152,7 @@ async def play(ctx, url: str):
         ydl.download([url])
 
     for file in os.listdir('./'):
-        if file.endswith(".mp3"):
+        if not file.endswith("clip.mp3") and file.endswith(".mp3"):
             name = file
             os.rename(file, "song.mp3")
             print(f"Renamed file: {file}\n")
