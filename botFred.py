@@ -125,6 +125,7 @@ async def on_voice_state_update(ctx, before, after):
 
 #Command bot to find youtube video and play audio
 @client.command(pass_context=True)
+@commands.has_role(Owner, Admin)
 async def play(ctx, url: str):
     song_there = os.path.isfile("song.mp3")
     try:
