@@ -2,7 +2,7 @@
     File name: botFred.py
     Author: Andrew Robinson
     Date Created: 6/20/2019
-    Last Modified: 6/26/2019
+    Last Modified: 7/12/2019
     Python Version 3.6
 '''
 
@@ -27,10 +27,14 @@ client = commands.Bot(command_prefix = PREFIX)
 
 #Connect to cogs folder
 @client.command()
+@commands.has_role("Owner")
+@commands.has_role("Admin")
 async def load(ctx, extension):
     client.load_extension(f'cogs.{extension}')
 
 @client.command()
+@commands.has_role("Owner")
+@commands.has_role("Admin")
 async def unload(ctx, extension):
     client.unload_extension(f'cogs.{extension}')
 
@@ -58,6 +62,7 @@ async def join(ctx):
     else:
         voice = await channel.connect()
         print(f"The bot has connected to {channel}\n")
+        await ctx.channel.purge(limit = 1)
         await ctx.send("Sup, nerds?")
 
 #Command bot to leave voice channel
@@ -67,6 +72,7 @@ async def leave(ctx):
     voice = get(client.voice_clients, guild=ctx.guild)
 
     if voice and voice.is_connected():
+        await ctx.channel.purge(limit = 1)
         await voice.disconnect()
         print(f"The bot has left {channel}\n")
         await ctx.send("I'm out this mf.")
@@ -125,7 +131,8 @@ async def on_voice_state_update(ctx, before, after):
 
 #Command bot to find youtube video and play audio
 @client.command(pass_context=True)
-@commands.has_role(Owner, Admin)
+@commands.has_role("Owner")
+@commands.has_role("Admin")
 async def play(ctx, url: str):
     song_there = os.path.isfile("song.mp3")
     try:
