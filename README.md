@@ -2,4 +2,4 @@
 
 An evolving Discord bot with moderation and voice capabilities.
 
-Runs on Pyton 3.6
+Runs on Python 3.6
