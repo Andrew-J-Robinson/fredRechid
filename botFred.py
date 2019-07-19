@@ -15,31 +15,38 @@ import time
 import urllib.request
 import urllib.parse
 import re
+import logging
 
-#Bot setup
-###############################################################################
+#Discord logging
+#-------------------------------------------------------------------------------
+logger = logging.getLogger('discord')
+logger.setLevel(logging.DEBUG)
+handler = logging.FileHandler(filename='discord.log', encoding='utf-8', mode='w')
+handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
+logger.addHandler(handler)
+
+#-------------------------------Bot setup--------------------------------------
+################################################################################
 
 #Read and pass token from token.txt
-#-------------------------------------------------------------------------------
+#----------------------------------
 tokenFile = open("token.txt", 'r')
 TOKEN = tokenFile.read().replace('\n', '')
 tokenFile.close()
 
 #Command prefix. Type this character before command. Eg: '.join'
-#-------------------------------------------------------------------------------
+#---------------------------------------------------------------
 PREFIX = '.'
 client = commands.Bot(command_prefix = PREFIX)
 
 #Connect to cogs folder
-#-------------------------------------------------------------------------------
+#----------------------
 @client.command()
-@commands.has_role("Owner")
 @commands.has_role("Admin")
 async def load(ctx, extension):
     client.load_extension(f'cogs.{extension}')
 
 @client.command()
-@commands.has_role("Owner")
 @commands.has_role("Admin")
 async def unload(ctx, extension):
     client.unload_extension(f'cogs.{extension}')
@@ -48,17 +55,17 @@ for filename in os.listdir('./cogs'):
     if filename.endswith('.py'):
         client.load_extension(f'cogs.{filename[:-3]}')
 
-#Basic Bot functions
-###############################################################################
+#---------------------------Basic Bot functions---------------------------------
+################################################################################
 
 #Confirm bot is online
-#-------------------------------------------------------------------------------
+#---------------------
 @client.event
 async def on_ready():
     print(client.user.name + " is online.\n")
 
 #Command bot to join voice channel
-#-------------------------------------------------------------------------------
+#---------------------------------
 @client.command(pass_context=True)
 async def join(ctx):
     global voice
@@ -75,7 +82,7 @@ async def join(ctx):
         await ctx.send("Sup, nerds?")
 
 #Command bot to leave voice channel
-#-------------------------------------------------------------------------------
+#----------------------------------
 @client.command(pass_context=True)
 async def leave(ctx):
     channel = ctx.message.author.voice.channel
@@ -90,7 +97,7 @@ async def leave(ctx):
         print("Leave command failed: Bot not in channel\n")
         await ctx.send("You tryna kick me out and I'm not even in here?")
 
-#Play Spongebob quote from specific Youube page when a user joins the voice channel
+#Play Spongebob quote from specific Youtube page when a user joins the voice channel
 #-------------------------------------------------------------------------------
 @client.event
 async def on_voice_state_update(ctx, before, after):
@@ -149,10 +156,10 @@ async def on_voice_state_update(ctx, before, after):
         return
 
 #Command bot to find youtube video and play audio
-#-------------------------------------------------------------------------------
+#------------------------------------------------
 @client.command(pass_context=True)
 @commands.has_role("Admin")
-async def play(ctx, url: str):
+async def play(ctx, *, url: str):
     song_there = os.path.isfile("song.mp3")
     try:
         if song_there: #If song.mp3 is already present, remove it to be replaced by the next song
@@ -207,7 +214,8 @@ async def play(ctx, url: str):
         print("ERROR: Bot isn't connected to a voice channel.")
 
     newName = name.rsplit("-", 2)
-    await ctx.send(f"Playing: {newName}")
+    print(newName)
+    await ctx.send(f"Playing: {newName[0]}")
     print("playing\n")
 
 #Runs bot using token as defined above

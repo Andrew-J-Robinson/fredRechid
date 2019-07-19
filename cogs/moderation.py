@@ -13,5 +13,17 @@ class Moderation(commands.Cog):
         amount = amount + 1
         await ctx.channel.purge(limit = amount)
 
+    #Kick member
+    @commands.command()
+    @commands.has_role("Admin")
+    async def kick(self, ctx, member : discord.Member, *, reason=None):
+        await member.kick(reason=reason)
+
+    #Ban member
+    @commands.command()
+    @commands.has_role("Admin")
+    async def ban(self, ctx, member : discord.Member, *, reason=None):
+        await member.ban(reason=reason)
+
 def setup(client):
     client.add_cog(Moderation(client))
