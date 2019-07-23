@@ -32,7 +32,7 @@ class Games(commands.Cog):
                     'Outlook not so good',
                     'Very doubtful.']
         await ctx.send(f'8-Ball: {question}')
-        time.sleep(3)
+        time.sleep(2)
         await ctx.send(f'Answer: {random.choice(responses)}\n')
 
 
