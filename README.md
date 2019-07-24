@@ -2,6 +2,9 @@
 
 An evolving Discord bot with moderation and voice capabilities.
 
-Runs on Python 3.6
+Python 3.5.3 or higher is required
 
-Requires Discord.py with voice enabled, FFmpeg and youtube_dl.
+#Requirements
+Discord.py with voice: https://github.com/Rapptz/discord.py
+FFmpeg 
+youtube_dl
