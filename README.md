@@ -20,3 +20,6 @@ FFmpeg: https://ffmpeg.org/
 ```
 $ git clone https://github.com/aRobinson7/fredRechid
 ```
+
+# Add Fred Rechid To Your Discord With This Link
+https://discordapp.com/api/oauth2/authorize?client_id=590974516281475102&permissions=0&scope=bot
