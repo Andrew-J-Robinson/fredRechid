@@ -23,3 +23,5 @@ $ git clone https://github.com/aRobinson7/fredRechid
 
 # Add Fred Rechid To Your Discord Server With This Link
 https://discordapp.com/api/oauth2/authorize?client_id=590974516281475102&permissions=0&scope=bot
+
+**Note:** Though this is a public repo and bot, features/commands of this bot may be limited to certain custom server roles, as this is intended to be a custom but on my personal server. Feel free to alter the code to your own role/permission preferences.
