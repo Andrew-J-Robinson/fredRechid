@@ -7,6 +7,12 @@ Python 3.5.3 or higher
 
 Discord.py with voice: https://github.com/Rapptz/discord.py
 
-youtube_dl: for dowloading and converting YOuTube videos to .mp3
+youtube_dl: https://ytdl-org.github.io/youtube-dl/download.html
 
-FFmpeg: for playing .mp3 files
+FFmpeg: https://ffmpeg.org/
+
+# Clone This Repo With This Command
+
+```
+$ git clone https://github.com/aRobinson7/fredRechid
+```
