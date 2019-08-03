@@ -1,4 +1,4 @@
-# fredRechid
+# Fred Rechid
 
 An evolving Discord bot with moderation and voice capabilities.
 
