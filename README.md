@@ -1,6 +1,6 @@
 # Fred Rechid
 
-An Discord bot with moderation and voice-line capabilities.
+A Discord bot with moderation and voice-line capabilities.
 
 **Note:** Fred will soon be losing musc playing capabilities and will strictly be a custom moderation bot.
 
